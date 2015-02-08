@@ -39,9 +39,9 @@ $db_ropass     = "%(db_ropass)s";  # best just to leave the names as-is.
 
 $file_root   = "%(file_root)s/";    
 $script_root = "%(script_root)s/"; 
-$web_root    = "http://%(web_host)s/%(web_base)s/";
-$cgi_root    = "http://%(web_host)s/cgi-bin/%(cgi_base)s/";
-$cgi_path    = "/cgi-bin/%(cgi_base)s/"; # Used for cookies
+$web_root    = "/%(web_base)s/";
+$cgi_root    = "/cgi-bin/%(cgi_base)s/";
+$cgi_path    = "/"; # Used for cookies
 #$secure_root = "https://%(web_host)s/cgi-bin/%(cgi_base)s/"; # URL for secure DocDB in non-secure version 
 #$PrivateRoot = "https://%(web_host)s/cgi-bin/%(cgi_base)s/"; # URL for private DocDB in secure and public versions 
 
