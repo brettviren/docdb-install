@@ -1,0 +1,5 @@
+create database {db_name};
+grant select on {db_name}.* to {db_rouser}@localhost identified by "{db_ropass}";
+grant select,insert,update,delete on {db_name}.* to {db_rwuser}@localhost identified by "{db_rwpass}";
+grant ALL on {db_name}.* to {db_admuser}@localhost identified by "{db_admpass}";
+

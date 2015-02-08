@@ -1,0 +1,11 @@
+[client-adm]
+user={db_admuser}
+password={db_admpass}
+
+[client-rw]
+user={db_rwuser}
+password={db_rwpass}
+
+[client-ro]
+user={db_rouser}
+password={db_ropass}

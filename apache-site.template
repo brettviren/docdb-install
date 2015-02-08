@@ -1,0 +1,53 @@
+<VirtualHost *:80>
+        ServerName {web_host}
+        DocumentRoot {file_root}
+        ServerAdmin {admin_email}
+        CustomLog "/var/log/apache2/{web_host}" combined
+        ErrorLog "/var/log/apache2/{web_host}-error"
+        LogLevel warn
+
+        ScriptAlias /cgi-bin/ {script_root}/
+
+	Alias /DocDB/ {file_root}/
+        <Directory "{file_root}/">
+           Options ExecCGI FollowSymLinks
+           Order allow,deny
+           Allow from all
+           AuthType Basic
+           AuthName "{project_name}"
+           AuthUserFile  {auth_file}
+           <Limit GET POST>
+              require valid-user
+           </Limit>
+        </Directory>
+
+        <Directory "{script_root}/">
+           Options ExecCGI SymLinksIfOwnerMatch
+           Order allow,deny
+           Allow from all
+        </Directory>
+
+        <Directory "{script_root}/private">
+           Options ExecCGI FollowSymLinks
+           AuthType Basic
+           AuthName "{project_name}"
+           AuthUserFile  {auth_file}
+           <Limit GET POST>
+              require valid-user
+           </Limit>
+        </Directory>
+        
+        <Directory "{script_root}/public">
+           Options ExecCGI FollowSymLinks
+           AuthType Basic
+           AuthName "{project_name}"
+           AuthUserFile  {auth_file}
+           <Limit GET POST>
+              require user review
+           </Limit>
+        </Directory>
+
+        TraceEnable off
+
+</VirtualHost>
+

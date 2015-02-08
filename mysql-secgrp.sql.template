@@ -1,0 +1,1 @@
+insert into SecurityGroup set Name='{db_admuser}',Description='{project_name} Administrators',CanCreate=1,CanAdminister=1;

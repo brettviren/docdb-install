@@ -1,0 +1,150 @@
+#
+# Description: Configuration file for your projects DocDB settings. 
+#              Set variables  for server names, accounts, and command 
+#              paths here.
+#              Rename as ProjectGlobals.pm
+#              This file is included in every DocDB program.
+#              You can override any settings in DocDBGlobals.pm here.
+#
+#      Author: Eric Vaandering (ewv@fnal.gov)
+#    Modified: 
+
+# Copyright 2001-2013 Eric Vaandering, Lynn Garren, Adam Bryant
+
+#    This file is part of DocDB.
+
+#    DocDB is free software; you can redistribute it and/or modify
+#    it under the terms of version 2 of the GNU General Public License 
+#    as published by the Free Software Foundation.
+
+#    DocDB is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with DocDB; if not, write to the Free Software
+#    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+# DB settings
+
+$db_name       = "%(db_name)s";               # Database name
+$db_host       = "%(db_host)s";
+$db_rwuser     = "%(db_rwuser)s";             # You can change the names of the accounts if you are
+$db_rwpass     = "%(db_rwpass)s"; # hosting more than one DocDB on the same SQL server
+$db_rouser     = "%(db_rouser)s";             # (for two different projects). Otherwise its probably
+$db_ropass     = "%(db_ropass)s";  # best just to leave the names as-is.
+
+# Root directories and URLs
+
+$file_root   = "%(file_root)s/";    
+$script_root = "%(script_root)s/"; 
+$web_root    = "http://%(web_host)s/%(web_base)s/";
+$cgi_root    = "http://%(web_host)s/cgi-bin/%(cgi_base)s/";
+$cgi_path    = "/cgi-bin/%(cgi_base)s/"; # Used for cookies
+#$secure_root = "https://%(web_host)s/cgi-bin/%(cgi_base)s/"; # URL for secure DocDB in non-secure version 
+#$PrivateRoot = "https://%(web_host)s/cgi-bin/%(cgi_base)s/"; # URL for private DocDB in secure and public versions 
+
+# Name and e-mail address of the administrators (or mailing list for admins)
+
+$DBWebMasterEmail = "%(admin_email)s";
+$DBWebMasterName  = "%(admin_name)s";
+
+$AuthUserFile     = "{auth_file}";
+$MailServer       = "%(smtp_server)s";
+
+# Text customization. Leave $WelcomeMessage blank for no message on top of DB
+# BTeV uses a welcome message for the public part of the DB, but not for the
+# private
+
+$FirstYear      = %(first_year)s;           # Earliest year that documents can be created
+$Project        = "%(project_name)s";
+$ShortProject   = "%(project_nick)s";    # This is the project used in the Document ID
+#$WelcomeMessage = "Welcome to the public portion of the $Project Document Database,<br> the repository for all $Project public talks, proceedings, preprints, and publications.";
+
+# ----- No other changes are needed for the non-public version of the DocDB.
+# ----- However, there are other configuration settings you may want to investgate
+
+# These settings are for public version of DB. Uncomment these five lines 
+# for the version of this file you place in the public area. While only the 
+# first is probably necessary, as a precaution its wise to do the other 4 as 
+# well.
+
+#$Public           = 1;
+#$remote_user      = ""; # Just to be safe
+#$RemoteUsername   = ""; # Just to be safe
+#$db_rwuser        = ""; # Just to be safe
+#$db_rwpass        = ""; # Just to be safe
+
+# If you are just linking executables for the public version of the database
+# you need to include lines like these three to pick up the .pm files from 
+# the default location. Replace /www/cgi-bin/DocDB with your path.
+
+#if (-e "/www/cgi-bin/DocDB/DocDBGlobals.pm") {
+#  use lib "/www/cgi-bin/DocDB/";
+#}
+
+# ----- No other changes are needed for the DocDB. However, there are 
+# ----- other configuration settings you may want to investgate
+
+# ----- At this point you can also change any of the other variables in
+# ----- DocDBGlobals.pm for things like $HomeLastDays, command locations
+# ----- (if not using Linux) etc.
+
+#$LastDays             = 20;    # Number of days for default in LastModified
+#$HomeLastDays         = 7;     # Number of days for last modified on home page
+#$HomeMaxDocs          = 50;    # Maximum number of documents on home page
+#$MeetingWindow        = 7;     # Days before and after meeting to preselect
+#$TalkHintWindow       = 7;     # Days before and after to guess on documents
+#$MeetingFiles         = 3;     # Number of upload boxes on meeting short form
+#$InitialSessions      = 5;     # Number of initial sessions when making meeting
+
+#$Wget   = "/usr/bin/wget --no-check-certificate"; # --no-check is not default, enable if needed
+                                                   # useful when fetching from https with "invalid" certs
+#$Tar    = "";                     # Set this if you don't have GNU tar
+#$GTar   = "/bin/tar ";            # Set this if you do have GNU tar (e.g. Linux)
+#$GZip   = "/bin/gzip ";           # Currently only needed if non-GNU tar
+#$GUnzip = "/bin/gunzip ";         # Currently only needed if non-GNU tar
+#$Unzip  = "/usr/bin/unzip -q ";
+#$Zip    = "/usr/bin/zip -q -r ";  # Set to "" in ProjectGlobals if not installed
+
+#$TmpDir = "/tmp/";
+
+# Which things are publicly viewable?
+
+#$PublicAccess{MeetingList} = 0;  
+  
+# ----- These are some options for extra features of the DocDB that can be 
+# ----- enabled. Values shown are defaults, change 0 -> 1 to enable a feature.
+# ----- There are a lot of other options shown in DocDBGlobals.pm. You can
+# ----- change any of them here.
+
+#$CaseInsensitiveUsers = 0;     # Can use "Project" for a name in the 
+                                # security groups, but "project" in .htaccess 
+
+#$EnhancedSecurity     = 0;     # Separate lists for view, modify
+#$SuperiorsCanModify   = 0;     # In enhanced model, a superior group can modify
+                                # a subordinate groups documents without explicit
+                                # permission
+
+#$UserValidation = "";          # || "basic" || "certificate"
+                                # Do we do group authorization like V5 and before
+			        # or do we allow .htaccess/.htpasswd users to map to groups (basic)
+			        # or require SSL certificates of users which map to groups (certificate)			       
+#$ReadOnly       = 0;           # Can be used in conjunction with individual
+                                # authorization methods to set up a group-like
+                                # area with group passwords which can view
+                                # but not change any info
+#$ReadOnlyAdmin  = 0;           # Allows administration from the read-only 
+                                # area. Only suggested for boot-strapping until
+                                # you have an individual selected as admin                               
+			       
+#$UseSignoffs          = 0;     # Sign-off system for document approval
+#$MailInstalled        = 1;     # Is the Mailer::Mail module installed?
+
+#$ContentSearch        = "cd /path/to/search/script; ./ContentSearch";    
+                         # Scripts and engine installed for searching files
+
+#$DefaultPublicAccess  = 0;     # New documents are public by default
+
+1;
