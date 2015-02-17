@@ -6,9 +6,9 @@
         ErrorLog "/var/log/apache2/{web_host}-error"
         LogLevel warn
 
-        ScriptAlias /cgi-bin/ {script_root}/
+        ScriptAlias {cgi_base}/ {script_root}/
 
-	Alias /DocDB/ {file_root}/
+	Alias {web_base}/ {file_root}/
         <Directory "{file_root}/">
            Options ExecCGI FollowSymLinks
            Order allow,deny

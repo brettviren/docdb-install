@@ -43,11 +43,17 @@ class Config(object):
         web_rwuser = env('web_rwuser', 'docdbrw'),
         web_rwpass = env('web_rwpass', pwgen()),
 
+        # the file system path for the document store
         file_root = env('file_root', os.path.join(env('root'), 'htdocs')),
+        # the file system path for the cgi-bin area
         script_root = env('script_root', os.path.join(env('root'), 'cgi-bin')),
+        # the FQDN for the web sever
         web_host = env('web_host', 'localhost'),
+        # Relative base path part of the URL to locate non-CGI files
         web_base = env('web_base', 'DocDB'),
-        cgi_base = env('cgi_base', 'private'),
+        # Relative base path part of the URL to locate CGI files ("/private" will go under it)
+        cgi_base = env('cgi_base', 'cgi-bin'),
+
         admin_email = env('admin_email','root@localhost'),
         admin_name = env('admin_name','root'),
         auth_file = env('auth_file', os.path.join(env('root'), 'passwords/htpasswd')),
@@ -127,6 +133,9 @@ class Config(object):
             filename = os.path.join(thisdir, canonical_config_filename)
 
         if os.path.exists(filename):
+            last = json.load(open(filename))
+            if last == self.asdict():
+                return filename
             os.rename(filename, filename+'.old')
         open(filename,'w').write(json.dumps(self.asdict(), indent=2))
         return filename
@@ -173,12 +182,13 @@ class Install(object):
             return
         template = self.find_file(template, **kwds)
 
-        self.info('filtering %s' % destination)
+        self.info('filtering %s -> %s' % (os.path.basename(template), destination))
 
         text = open(template).read()
         try:
             newtext = self.cfg.format(text)
         except KeyError:
+            self.warn("format filtering failed, trying interpolation on %s" % template)
             newtext = text % self.cfg.asdict()
 
         open(destination, 'w').write(newtext)
@@ -235,6 +245,7 @@ class Install(object):
         self.shell('mysql -uroot -hlocalhost < /tmp/mysql-init.sql')
         self.shell('mysql -u{db_admuser} -p{db_admpass} {db_name} < {srcdir}/DocDB/sql/CreateDatabase.SQL')
         self.shell('mysql -u{db_admuser} -p{db_admpass} {db_name} < /tmp/mysql-secgrp.sql')
+        self.shell('rm /tmp/mysql-init.sql /tmp/mysql-secgrp.sql')
     
     def save(self, filename):
         filename = self.cfg.save(filename)
