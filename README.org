@@ -20,6 +20,8 @@ The files included and ending in =.template= are installed after being processed
 
 A file in JSON format will be produced to hold the parameters of the installation.  Such a file can also be given to script to provide for the installation configuration.  This file will contain passwords so protect it.  Subsequent running will use the contents of this file to set the installation configuration parameters.  If no configuration file is explicitly given to the script it will look for one in a known location under the =root= directory of the installation.
 
+An [[./example-installation-configuration.json][example configuration file]]  is available as a starting point.
+
 ** Environment variables
 
 When no configuration file is explicitly given to the script and no configuration file is found in the canonical location then a set of default values coded in the script will be used.  In addition, these default values can be overridden by a corresponding environment variable which is named by prepending =DOCDB_= to the upper-case version of the parameter name.  
@@ -41,7 +43,7 @@ As said above, the env. vars. are only honored if a configuration file does not 
 
 ** Example installation
 
-This installs as it might in the Docker container:
+Here is an outline of an installation:
 
 #+BEGIN_EXAMPLE
   $ cd /some/place
