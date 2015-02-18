@@ -3,6 +3,7 @@
   "admin_name": "Mr. Admin", 
   "auth_file": "/var/lib/docdb/passwords/htpasswd", 
   "cgi_base": "/cgi-bin", 
+  "db_root_pass": "SECRET",
   "db_admpass": "SECRET", 
   "db_admuser": "docdbadm", 
   "db_host": "localhost", 

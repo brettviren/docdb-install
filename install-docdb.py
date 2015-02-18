@@ -30,6 +30,7 @@ class Config(object):
 
         db_name = env('db_name','DocDB'),
         db_host = env('db_host','localhost'),
+        db_root_pass = env('db_root_pass',''),
 
         db_admuser = env('db_admuser','docdbadm'),
         db_admpass = env('db_admpass', pwgen()),
@@ -239,13 +240,17 @@ class Install(object):
 
 
     def configure_mysql(self):
-        if self.cfg.db_name in self.command('mysql -uroot -hlocalhost -e "show databases"'):
+        root_pass = ""
+        if self.cfg.db_root_pass:
+            root_pass = "-p%s" % self.cfg.db_root_pass
+
+        if self.cfg.db_name in self.command('mysql -uroot {root_pass} -hlocalhost -e "show databases"', root_pass=root_pass):
             self.warn('Database exists: "{db_name}", manually drop to remake.')
             return
 
         self.filter_template('mysql-init.sql.template', '/tmp/mysql-init.sql')
         self.filter_template('mysql-secgrp.sql.template', '/tmp/mysql-secgrp.sql')
-        self.shell('mysql -uroot -hlocalhost < /tmp/mysql-init.sql')
+        self.shell('mysql -uroot -hlocalhost {root_pass} < /tmp/mysql-init.sql', root_pass=root_pass)
         self.shell('mysql -u{db_admuser} -p{db_admpass} {db_name} < {srcdir}/DocDB/sql/CreateDatabase.SQL')
         self.shell('mysql -u{db_admuser} -p{db_admpass} {db_name} < /tmp/mysql-secgrp.sql')
         self.shell('rm /tmp/mysql-init.sql /tmp/mysql-secgrp.sql')
