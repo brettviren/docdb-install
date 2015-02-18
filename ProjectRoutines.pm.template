@@ -128,6 +128,11 @@ sub DocDBNavBar {
   unless ($Public) {
     print "[&nbsp;<a href=\"$DocDBInstructions\">Help</a>&nbsp;]\n";
   } 
+  if ($ENV{HTTPS} eq "on") {
+      print "[&nbsp;<a href=\"https://nobody\@$ENV{HTTP_HOST}$MainPage\">Logout</a>&nbsp;]&nbsp;\n";
+  } else {
+      print "[&nbsp;<a href=\"http://nobody\@$ENV{HTTP_HOST}$MainPage\">Logout</a>&nbsp;]&nbsp;\n";
+  }
   print "</div>\n";
 }
 
