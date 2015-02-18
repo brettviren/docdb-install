@@ -1,0 +1,76 @@
+#+TITLE: Install script for DocDB
+
+* Why?
+
+DocDB is non-trivial to install and has no method other than some [[http://docdb.fnal.gov/doc/install-docdb.html][old, vague instructions]].  
+
+* What?
+
+This package provides a Python script which handles a bulk of the DocDB installation procedure.   It started out as part of an effort to install and run [[https://github.com/brettviren/docdb-docker][DocDB from Docker container]].
+
+* How?
+
+The Python script =install-docdb.py= captures the configuration and commands needed to install DocDB.  The installation can be influenced in three ways:
+
+** Template files
+
+The files included and ending in =.template= are installed after being processed by the simple template system to resolve any parameter calls.  These files can be modified to suit a particular installation situation but are likely okay to leave as is.
+
+** Configuration file
+
+A file in JSON format will be produced to hold the parameters of the installation.  Such a file can also be given to script to provide for the installation configuration.  This file will contain passwords so protect it.  Subsequent running will use the contents of this file to set the installation configuration parameters.  If no configuration file is explicitly given to the script it will look for one in a known location under the =root= directory of the installation.
+
+** Environment variables
+
+When no configuration file is explicitly given to the script and no configuration file is found in the canonical location then a set of default values coded in the script will be used.  In addition, these default values can be overridden by a corresponding environment variable which is named by prepending =DOCDB_= to the upper-case version of the parameter name.  
+
+** Configuration parameters
+
+Read the script for the full set of possible parameters.  
+
+** Big Fat Caveat
+
+There is no guarantee this package does not end up destroying all that you love and care about.  
+
+Because this script is meant to run in the process of creating a Docker container, where the starting point is well crafted and failures are cheap, running it on a live system may produced unwanted results.  
+
+There are no facilities provided for to "clean up" after some mistake.  To redo an install you may need to manually drop MySQL tables, remove the install directory and remove the symlink made into the Debian =/etc/apache2/= area.  However, the script is meant to be somewhat idempotent so rerunning tends to leave already accomplished steps alone.  When it encounters a previously existing install target it will print a warning message to the terminal and then pass over it.  Removing the target should allow it to be recreated.
+
+As said above, the env. vars. are only honored if a configuration file does not exist.  After first run, editing this file is the recommended way to tweak values.  But, keep in mind the idempotent features do not remake existing files.  You must manually purge them if changes in configuration are to take place.
+
+
+** Example installation
+
+This installs as it might in the Docker container:
+
+#+BEGIN_EXAMPLE
+  $ cd /some/place
+  $ git clone https://github.com/brettviren/docdb-install.git
+  $ cd docdb-install
+  $ sudo DOCDB_ROOT=/var/lib/docdb python ./install-docdb.py
+  $ less /var/lib/docdb/installation.json  # should fail as normal user!
+  $ sudo less /var/lib/docdb/installation.json
+#+END_EXAMPLE
+
+Here is an actual installation:
+
+#+BEGIN_EXAMPLE
+  $ git clone https://github.com/brettviren/docdb-install.git
+  $ cd docdb-install/
+  $ sudo apt-get install apache2-utils mysql-client mysql-server
+  $ sudo DOCDB_NAME=edg-docdb DOCDB_PROJECT_NAME="EDG Document Database" DOCDB_WEB_HOST="lycastus.phy.bnl.gov" DOCDB_WEB_ROOT="edg/docdb" python ./install-docdb.py
+  $ sudo apt-get install libcgi-untaint-perl libxml-sax-perl libxml-perl libxml-twig-perl libxml-grove-perl libdatetime-perl libdigest-sha-perl libdigest-perl
+  $ sudo /etc/init.d/apache2 restart
+  $ firefox http://lycastus.phy.bnl.gov/edg/cgi-bin/DocumentDatabase
+#+END_EXAMPLE
+
+To tweak:
+
+#+BEGIN_EXAMPLE
+  $ sudo mv ./installation.json /root/docdb-installation.json
+  $ sudo emacs /root/docdb-installation.json
+  $ sudo rm /var/lib/docdb/<file>
+  $ sudo python ./install-docdb.py /root/docdb-installation.json
+  $ sudo /etc/init.d/apache2 restart
+  $ firefox http://lycastus.phy.bnl.gov/edg/cgi-bin/DocumentDatabase
+#+END_EXAMPLE
