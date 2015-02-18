@@ -204,9 +204,11 @@ class Install(object):
             self.shell('git clone {tag} {giturl} {srcdir}', tag=tag)
 
         self.shell('mkdir -p {file_root} && chown www-data.www-data {file_root}')
-        self.shell('ln -sf {srcdir}/DocDB/html {file_root}/Static')
+        if not os.path.exists(self.cfg.format('{file_root}/Static')):
+            self.shell('ln -s {srcdir}/DocDB/html {file_root}/Static')
         self.shell('mkdir -p {script_root}')
-        self.shell('ln -sf {srcdir}/DocDB/cgi {script_root}/private')
+        if not os.path.exists(self.cfg.format('{script_root}/private')):
+            self.shell('ln -s {srcdir}/DocDB/cgi {script_root}/private')
         # fixme; what about public/ ?
 
         for fname in ['ProjectGlobals.pm', 'ProjectMessages.pm',
@@ -216,7 +218,8 @@ class Install(object):
 
         self.filter_template('apache-site.template',
                              self.cfg.format('{root}/apache-site.conf'))
-        self.shell('ln -sf {root}/apache-site.conf /etc/apache2/sites-enabled/{web_host}.conf')
+        if not os.path.exists(self.cfg.format('/etc/apache2/sites-enabled/{web_host}.conf')):
+            self.shell('ln -s {root}/apache-site.conf /etc/apache2/sites-enabled/{web_host}.conf')
 
         # fixme: instead of writing this, save the configuration as JSON
         #self.filter_template('my.cnf.template', config['my_cnf'])
