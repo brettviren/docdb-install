@@ -204,7 +204,7 @@ class Install(object):
                 tag = '-b ' + tag
             self.shell('git clone {tag} {giturl} {srcdir}', tag=tag)
 
-        self.shell('mkdir -p {file_root} && chown www-data.www-data {file_root}')
+        self.shell('mkdir -p {file_root} && chown www-data:www-data {file_root}')
         if not os.path.exists(self.cfg.format('{file_root}/Static')):
             self.shell('ln -s {srcdir}/DocDB/html {file_root}/Static')
         self.shell('mkdir -p {script_root}')
