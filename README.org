@@ -76,3 +76,7 @@ To tweak:
   $ sudo /etc/init.d/apache2 restart
   $ firefox http://lycastus.phy.bnl.gov/edg/cgi-bin/DocumentDatabase
 #+END_EXAMPLE
+
+** License
+
+docdb-install is available under the terms of the GNU Public License (GPL), version 2.
